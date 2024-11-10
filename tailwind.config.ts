@@ -12,7 +12,10 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        libre: ["Libre Baskerville", "serif"],
+      },
     },
   },
   plugins: [],
-} satisfies Config;
+} as Config;
