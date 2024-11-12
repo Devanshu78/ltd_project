@@ -3,7 +3,7 @@ import OtpBox from "./OtpBox";
 import { authConfig } from "@/auth";
 import { getServerSession } from "next-auth";
 
-const page = async ({ params }: { params: { email: string } }) => {
+const page = async () => {
   const session = await getServerSession(authConfig);
   return (
     <>
