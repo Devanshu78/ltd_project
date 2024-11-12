@@ -1,7 +1,7 @@
 import React from "react";
 import Box from "./Box";
 
-const Welcome = async () => {
+const Welcome = () => {
   return (
     <>
       <div className="min-h-screen flex  bg-white text-black">
