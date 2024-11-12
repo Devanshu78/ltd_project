@@ -68,7 +68,6 @@ const Box = () => {
 export default Box;
 
 const SocialIcon = () => {
-  const router = useRouter();
   const handleClick = async (Title: string) => {
     if (Title === "Google") {
       try {
@@ -111,6 +110,3 @@ const SocialIcon = () => {
     </>
   );
 };
-function handleClick(Title: string): void {
-  throw new Error("Function not implemented.");
-}

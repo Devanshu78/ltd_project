@@ -47,7 +47,7 @@ export default function OtpBox({ data }: any) {
 
         <div className="mt-5">
           <h1 className="text-2xl text-black/50 border-none outline-none p-6">
-            We've emailed you a code
+            We&apos; ve emailed you a code
           </h1>
 
           <p className="text-black/50 pb-1">
@@ -78,7 +78,7 @@ export default function OtpBox({ data }: any) {
           ))}
         </div>
         <p className="text-sm text-[#315EFF]">
-          Didn't receive an email? Resend after 02:00
+          Didn&apos;t receive an email? Resend after 02:00
         </p>
 
         <Link
