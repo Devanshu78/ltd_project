@@ -14,6 +14,7 @@ export default {
       },
       fontFamily: {
         libre: ["Libre Baskerville", "serif"],
+        source_sans: ["Source Sans Pro", "sans-serif"],
       },
     },
   },
