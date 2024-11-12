@@ -1,5 +1,5 @@
 import React from "react";
-import DetailBox from "./detailBox";
+import DetailBox from "./Detailbox";
 const page = () => {
   return (
     <>
