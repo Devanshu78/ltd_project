@@ -4,7 +4,11 @@ import Link from "next/link";
 import "./style.css";
 
 let currentIndex: number = 0;
-export default function OtpBox({ data }: any) {
+export default function OtpBox({
+  data,
+}: {
+  data: { user: { email: string } };
+}) {
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [active, setActive] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);

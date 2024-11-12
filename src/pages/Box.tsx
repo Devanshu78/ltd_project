@@ -72,8 +72,8 @@ const SocialIcon = () => {
     if (Title === "Google") {
       try {
         await signIn("google", { redirectTo: "/otpverification" });
-      } catch (error: any) {
-        console.log("signin error : ", error.message);
+      } catch (error: unknown) {
+        console.log("signin error : ", error);
       }
     }
   };
