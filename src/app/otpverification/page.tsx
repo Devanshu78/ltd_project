@@ -21,7 +21,7 @@ const page = async () => {
           <img src="group_illustrator.png" alt="group illustrator" />
         </div>
         <div className="flex items-center justify-center flex-1 rounded-l-[96px] bg-gradient-to-t from-[#d674ff] to-[#edd7f7]">
-          <OtpBox data={session} />
+          <OtpBox data={{ user: { email: session?.user?.email ?? "" } }} />
         </div>
       </div>
     </>
