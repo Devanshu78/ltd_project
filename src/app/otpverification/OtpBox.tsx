@@ -1,7 +1,11 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import "./style.css";
+import { useContextProvider } from "../Provider";
+import { signOut } from "next-auth/react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 let currentIndex: number = 0;
 export default function OtpBox({
@@ -12,6 +16,21 @@ export default function OtpBox({
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [active, setActive] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [code, setCode] = useState("");
+  const router = useRouter();
+  const { golbalEmail, setGolabalEmail, emailOtp, isVerified, setVerified } =
+    useContextProvider();
+
+  const Email = async (email: string) => {
+    const res = await axios.post(
+      `${process.env.NEXTAUTH_URL}/api/verifyemail`,
+      {
+        email,
+      }
+    );
+    setCode(res.data.code);
+    console.log(res);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -27,14 +46,33 @@ export default function OtpBox({
     setActive(currentIndex);
   };
 
+  const handleSubmit = () => {
+    if (otp.join("") === code) {
+      toast.success("OTP verified successfully");
+      setVerified("true");
+      router.push("/details");
+    } else {
+      toast.error("Invalid OTP");
+    }
+  };
+
+  useEffect(() => {
+    if (data && golbalEmail === "" && isVerified == "false") {
+      setGolabalEmail(data.user.email);
+      Email(data.user.email);
+    } else {
+      setCode(emailOtp);
+    }
+  }, [data, golbalEmail, setGolabalEmail, isVerified, setVerified]);
+
   useEffect(() => {
     inputRef.current?.focus();
   }, [active]);
 
   return (
     <div>
-      <div className="w-[600px]  bg-white rounded-2xl font-source_sans px-20 py-10 text-center flex flex-col gap-4 items-center relative ">
-        <Link href={"/"}>
+      <div className="bg-white rounded-2xl font-source_sans px-5 lg:px-10 py-5 xl:px-20 xl:py-10 text-center flex flex-col gap-4 items-center relative">
+        <button onClick={() => router.push("/")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 -960 960 960"
@@ -43,24 +81,26 @@ export default function OtpBox({
           >
             <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
           </svg>
-        </Link>
+        </button>
         <div>
-          <h1 className="text-3xl pb-2">Welcome!</h1>
-          <p>Promotional line by Eshway; Promotional line by Eshway;</p>
+          <h1 className="text-2xl md:text-3xl pb-2">Welcome!</h1>
+          <p className="text-md">
+            Promotional line by Eshway; Promotional line by Eshway;
+          </p>
         </div>
 
         <div className="mt-5">
-          <h1 className="text-2xl text-black/50 border-none outline-none p-6">
+          <h1 className="text-2xl text-black/50 p-6">
             We&apos; ve emailed you a code
           </h1>
 
           <p className="text-black/50 pb-1">
             To complete the sign up process, enter the code sent on:
           </p>
-          <p>{data?.user?.email || "founder@eshway.com"}</p>
+          <p>{golbalEmail || "founder@eshway.com"}</p>
         </div>
 
-        <div className="flex gap-5 mt-5">
+        <div className="flex gap-2 md:gap-5 mt-5">
           {otp.map((_, index) => (
             <input
               ref={index == active ? inputRef : null}
@@ -85,12 +125,12 @@ export default function OtpBox({
           Didn&apos;t receive an email? Resend after 02:00
         </p>
 
-        <Link
-          href="/details"
+        <button
+          onClick={() => handleSubmit()}
           className="rounded-2xl w-full h-10 bg-[#1B232E] text-white shadow-lg font-semibold my-12"
         >
           <p className="flex items-center justify-center h-full">Sign up</p>
-        </Link>
+        </button>
 
         <p className="w-full border-b border-black/25"></p>
 

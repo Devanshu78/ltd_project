@@ -2,23 +2,47 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { useContextProvider } from "@/app/Provider";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Box = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
 
+  const { setGolabalEmail, setEmailOtp } = useContextProvider();
+  const Email = async (email: string) => {
+    const res = await axios.post("/api/verifyemail", { email });
+    setEmailOtp(res.data.code);
+  };
+
   const handleSubmit = () => {
-    router.push("/otpverification");
+    if (email != "") {
+      setGolabalEmail(email);
+      Email(email);
+      router.push("/otpverification");
+    } else {
+      toast.error("Enter email first");
+    }
   };
 
   return (
     <div>
-      <div className="w-[600px]  bg-white rounded-2xl font-source_sans px-20 py-10 text-center flex flex-col gap-4 items-center">
+      <div className="bg-white rounded-2xl font-source_sans px-5 lg:px-10 py-5 xl:px-20 xl:py-10 text-center flex flex-col gap-4 items-center">
         <div>
-          <h1 className="text-3xl pb-2">Welcome!</h1>
-          <p>Promotional line by Eshway; Promotional line by Eshway;</p>
+          <h1 className="text-2xl xl:text-3xl pb-2">Welcome!</h1>
+          <p className="text-md">
+            Promotional line by Eshway; Promotional line by Eshway;
+          </p>
         </div>
-        <div className="rounded-lg w-full h-10 mt-8 bg-[rgb(247,247,247)] border-2 border-slate-300 flex items-center">
+
+        <img
+          src="group_illustrator.png"
+          alt="group illustrator"
+          className="h-36 sm:h-56 md:hidden"
+        />
+
+        <div className="rounded-lg w-full h-10 mt-4 xl:mt-8 bg-[rgb(247,247,247)] border-2 border-slate-300 flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 -960 960 960"
@@ -47,7 +71,7 @@ const Box = () => {
           className="rounded-2xl w-full h-10 bg-[#1B232E] text-white shadow-lg font-semibold mt-6"
           onClick={handleSubmit}
         >
-          <p className="flex items-center justify-center h-full">Sign up</p>
+          Sign up
         </button>
 
         <p className="text-blue-500">
@@ -71,8 +95,8 @@ const SocialIcon = () => {
   const handleClick = async (Title: string) => {
     if (Title === "Google") {
       try {
-        await signIn("google", { redirectTo: "/otpverification" });
-      } catch (error: unknown) {
+        await signIn("google");
+      } catch (error) {
         console.log("signin error : ", error);
       }
     }
