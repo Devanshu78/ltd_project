@@ -26,9 +26,11 @@ export const useStore = create<variables & functions>((set) => ({
           email,
         }
       );
-      res?.data?.code?.code == "EENVELOPE"
-        ? toast.error("Email is not valid")
-        : set({ emailOtp: res.data.code });
+      if (res?.data?.code?.code == "EENVELOPE") {
+        toast.error("Email is not valid");
+      } else {
+        set({ emailOtp: res.data.code });
+      }
       return;
     } catch (error) {
       console.log(error);

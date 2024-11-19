@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useStore } from "@/lib/store";
 
