@@ -1,11 +1,11 @@
 "use client";
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useContextProvider } from "../Provider";
+import { useStore } from "../../lib/store";
 
 const DetailBox = () => {
   const router = useRouter();
-  const { golbalEmail } = useContextProvider();
+  const golbalEmail = useStore((state) => state.golbalEmail);
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

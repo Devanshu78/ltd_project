@@ -2,19 +2,16 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { useContextProvider } from "@/app/Provider";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useStore } from "@/lib/store";
 
 const Box = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
 
-  const { setGolabalEmail, setEmailOtp } = useContextProvider();
-  const Email = async (email: string) => {
-    const res = await axios.post("/api/verifyemail", { email });
-    setEmailOtp(res.data.code);
-  };
+  const setGolabalEmail = useStore((state) => state.setGolabalEmail);
+  const Email = useStore((state) => state.Email);
 
   const handleSubmit = () => {
     if (email != "") {

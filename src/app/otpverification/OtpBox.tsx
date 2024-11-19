@@ -2,10 +2,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import "./style.css";
-import { useContextProvider } from "../Provider";
-import { signOut } from "next-auth/react";
-import axios from "axios";
 import toast from "react-hot-toast";
+import { useStore } from "@/lib/store";
+import { signOut } from "next-auth/react";
 
 let currentIndex: number = 0;
 export default function OtpBox({
@@ -16,21 +15,13 @@ export default function OtpBox({
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [active, setActive] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [code, setCode] = useState("");
   const router = useRouter();
-  const { golbalEmail, setGolabalEmail, emailOtp, isVerified, setVerified } =
-    useContextProvider();
 
-  const Email = async (email: string) => {
-    const res = await axios.post(
-      `${process.env.NEXTAUTH_URL}/api/verifyemail`,
-      {
-        email,
-      }
-    );
-    setCode(res.data.code);
-    console.log(res);
-  };
+  const golbalEmail = useStore((state) => state.golbalEmail);
+  const emailOtp = useStore((state) => state.emailOtp);
+  const Email = useStore((state) => state.Email);
+
+  const setGolabalEmail = useStore((state) => state.setGolabalEmail);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -47,9 +38,8 @@ export default function OtpBox({
   };
 
   const handleSubmit = () => {
-    if (otp.join("") === code) {
+    if (otp.join("") == emailOtp) {
       toast.success("OTP verified successfully");
-      setVerified("true");
       router.push("/details");
     } else {
       toast.error("Invalid OTP");
@@ -57,13 +47,11 @@ export default function OtpBox({
   };
 
   useEffect(() => {
-    if (data && golbalEmail === "" && isVerified == "false") {
+    if (data && golbalEmail === "") {
       setGolabalEmail(data.user.email);
       Email(data.user.email);
-    } else {
-      setCode(emailOtp);
     }
-  }, [data, golbalEmail, setGolabalEmail, isVerified, setVerified]);
+  }, [data, golbalEmail, setGolabalEmail]);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -72,7 +60,7 @@ export default function OtpBox({
   return (
     <div>
       <div className="bg-white rounded-2xl font-source_sans px-5 lg:px-10 py-5 xl:px-20 xl:py-10 text-center flex flex-col gap-4 items-center relative">
-        <button onClick={() => router.push("/")}>
+        <button onClick={() => signOut({ callbackUrl: "/" })}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 -960 960 960"

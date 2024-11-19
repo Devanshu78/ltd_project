@@ -36,5 +36,6 @@ export const sendMail = async (email: string) => {
     return code;
   } catch (error) {
     console.log(error);
+    return error;
   }
 };
