@@ -15,6 +15,7 @@ const DetailBox = () => {
     console.log(username, password);
     setUsername("");
     setPassword("");
+    router.push("/chooseindustry");
   };
 
   function toSentenceCase(str: string) {
